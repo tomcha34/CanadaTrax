@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CanadaTrax">
-        <activity android:name=".ContactActivity"></activity>
+        <activity android:name=".ViewContactActivity"></activity>
+        <activity android:name=".AddContactActivity" />
         <activity android:name=".CovidActivity" />
         <activity
             android:name=".MainActivity"

@@ -11,15 +11,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val covidButton : Button = findViewById(R.id.covidButton)
-        val contactsButton : Button = findViewById(R.id.contactsButton)
+        val addContactsButton : Button = findViewById(R.id.contactsButton)
+        val viewContactsButton : Button = findViewById(R.id.viewContacts)
 
         covidButton.setOnClickListener {
             val intent = Intent(this, CovidActivity::class.java)
             startActivity(intent)
         }
 
-        contactsButton.setOnClickListener {
-            val intent = Intent(this, ContactActivity::class.java)
+        addContactsButton.setOnClickListener {
+            val intent = Intent(this, AddContactActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewContactsButton.setOnClickListener {
+            val intent = Intent(this, ViewContactActivity::class.java)
             startActivity(intent)
         }
     }
