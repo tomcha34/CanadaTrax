@@ -1,47 +1,63 @@
 package com.android.canadatrax
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.android.canadatrax.network.NetworkClient
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Response
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TAG = "CovidActivity"
+lateinit var newCasesTextView: TextView
+lateinit var totalCasesTextView: TextView
 
 class CovidActivity : AppCompatActivity() {
 
-    //creating an instance of our NetworkClient class.
-    private val networkClient = NetworkClient()
+    lateinit var api: Api
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_covid)
-        getJson()
+        newCasesTextView = findViewById(R.id.newCasesTextView)
+        totalCasesTextView = findViewById(R.id.totalCasesTextView)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.covid19tracker.ca/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        api = retrofit.create(Api::class.java)
+        getSummary()
 
 
     }
 
-    //a function to get network data on a background thread.
-    private fun getJson() {
-        //Our NetworkClient instance
-        val request = networkClient.get()
+    private fun getSummary() {
+        val call = api.getSplit()
+        call.enqueue(object: Callback<CovidResponse> {
+            override fun onResponse(
+                call: Call<CovidResponse>,
+                response: retrofit2.Response<CovidResponse>
+            ) {
+                val covidData = response.body()!!
 
-        //a factory for network calls
-        val client = OkHttpClient()
-        //making a call on a background thread and handling the response.
-        client.newCall(request).enqueue(object: Callback {
-            override fun onFailure(call: Call, e: java.io.IOException) {
-                Log.e(TAG, "onFailure: Tommy it didn't work", )
+                for(covid in covidData.data){
+
+                    newCasesTextView.text = "New cases in Canada today: " + covid.newCases
+                    totalCasesTextView.text = "Total cases in Canada: " + covid.totalCases
+                }
+
+
+                }
+
+            override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
+                newCasesTextView.text = t.message
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body!!.string()
-                Log.w(TAG, body, )
-            }
 
         })
     }
+
 }
