@@ -10,8 +10,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TAG = "CovidActivity"
-lateinit var newCasesTextView: TextView
-lateinit var totalCasesTextView: TextView
+lateinit var valueDate: TextView
+lateinit var valueNewCases: TextView
+lateinit var valueNewDeaths: TextView
+lateinit var valueTotalCases: TextView
+lateinit var valueTotalDeaths: TextView
+lateinit var valueTotalRecoveries: TextView
 
 class CovidActivity : AppCompatActivity() {
 
@@ -20,8 +24,13 @@ class CovidActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_covid)
-        newCasesTextView = findViewById(R.id.newCasesTextView)
-        totalCasesTextView = findViewById(R.id.totalCasesTextView)
+        valueDate = findViewById(R.id.valueDate)
+        valueNewCases = findViewById(R.id.valueNewCases)
+        valueNewDeaths = findViewById(R.id.valueNewDeaths)
+        valueTotalCases = findViewById(R.id.valueTotalCases)
+        valueTotalDeaths = findViewById(R.id.valueTotalDeaths)
+        valueTotalRecoveries = findViewById(R.id.valueTotalRecoveries)
+
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.covid19tracker.ca/")
@@ -35,7 +44,7 @@ class CovidActivity : AppCompatActivity() {
     }
 
     private fun getSummary() {
-        val call = api.getSplit()
+        val call = api.getSummary()
         call.enqueue(object: Callback<CovidResponse> {
             override fun onResponse(
                 call: Call<CovidResponse>,
@@ -45,15 +54,20 @@ class CovidActivity : AppCompatActivity() {
 
                 for(covid in covidData.data){
 
-                    newCasesTextView.text = "New cases in Canada today: " + covid.newCases
-                    totalCasesTextView.text = "Total cases in Canada: " + covid.totalCases
+                    valueDate.text = covid.newDate
+                    valueNewCases.text = covid.newCases
+                    valueNewDeaths.text = covid.newDeaths
+                    valueTotalCases.text = covid.totalCases
+                    valueTotalDeaths.text = covid.totalDeaths
+                    valueTotalRecoveries.text = covid.totalRecoveries
+
                 }
 
 
                 }
 
             override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
-                newCasesTextView.text = t.message
+                valueDate.text = t.message
             }
 
 
