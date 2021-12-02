@@ -8,6 +8,6 @@ interface Api {
 
 
     @GET("summary")
-    fun getSplit(): Call<CovidResponse>
+    fun getSummary(): Call<CovidResponse>
 
 }
