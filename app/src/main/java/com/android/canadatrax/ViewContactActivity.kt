@@ -1,11 +1,9 @@
 package com.android.canadatrax
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.canadatrax.adapter.CloseContactAdapter
-import com.android.canadatrax.database.CloseContactData
 import com.android.canadatrax.database.ContactsDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
